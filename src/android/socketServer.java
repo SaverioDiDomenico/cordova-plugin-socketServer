@@ -28,7 +28,7 @@ public class socketServer extends CordovaPlugin {
 		try {
 			if ("startServer".equals(action)) {
 				JSONObject arg_object = args.getJSONObject(0);
-				int port =  Integer.parseInt(arg_object.getString("port"));
+				int port =  Integer.parseInt(arg_object.getInt("port"));
 				if(ServerActivated){
 					callbackContext.error("has been startServer");
 					return false;
