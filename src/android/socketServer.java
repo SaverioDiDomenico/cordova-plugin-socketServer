@@ -27,8 +27,8 @@ public class socketServer extends CordovaPlugin {
 	public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
 		try {
 			if ("startServer".equals(action)) {
-				JSONObject arg_object = args.getJSONObject(0);
-				int port =  Integer.parseInt(arg_object.getInt("port"));
+				//JSONObject arg_object = args.getJSONObject(0);
+				//int port =  Integer.parseInt(arg_object.getInt("port"));
 				if(ServerActivated){
 					callbackContext.error("has been startServer");
 					return false;
@@ -36,7 +36,8 @@ public class socketServer extends CordovaPlugin {
 				cordova.getThreadPool().execute(new Runnable() {
 					public void run() {
 						try{ 
-							myServerSocket = new ServerSocket(port); 
+							//myServerSocket = new ServerSocket(port); 
+							myServerSocket = new ServerSocket(8080); 
 							ServerActivated = true;
 						} catch(IOException ioe) { 
 							System.exit(-1); 
