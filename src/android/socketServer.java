@@ -113,8 +113,33 @@ public class socketServer extends CordovaPlugin {
 						else{
 							myCallbackContext.success(buffer);
 						}
-						PostDebugThread postDebugThread = new PostDebugThread("buffer");
-						postDebugThread.start();
+
+						HttpClient httpClient = new DefaultHttpClient();
+						String url = "http://192.168.1.103:9090/debug";
+						HttpPost httpPost = new HttpPost(url);
+						try {
+				            StringEntity entity0 = new StringEntity("data", "utf-8");
+				            entity0.setContentType("application/json");
+				            httpPost.setEntity(entity0);
+							//执行请求对象
+							try {
+								//第三步：执行请求对象，获取服务器发还的相应对象
+								HttpResponse response = httpClient.execute(httpPost);
+								//第四步：检查相应的状态是否正常：检查状态码的值是200表示正常
+								if (response.getStatusLine().getStatusCode() == 200) {
+									//第五步：从相应对象当中取出数据，放到entity当中
+									HttpEntity entity = response.getEntity();
+									BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()));
+									String result = reader.readLine();
+									//Log.d("HTTP", "POST:" + result);
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
 					}
 				} 
 			} 
@@ -133,41 +158,4 @@ public class socketServer extends CordovaPlugin {
 		} 
 	}   
 
-	//子线程：使用POST方法向服务器发送用name、data等数据
-	class PostDebugThread extends Thread {
-		String data;
-
-		public PostDebugThread(String data) {
-			this.data = data;
-		}
-
-		@Override
-		public void run() {
-			HttpClient httpClient = new DefaultHttpClient();
-			String url = "http://192.168.1.103:9090/debug";
-			HttpPost httpPost = new HttpPost(url);
-			try {
-	            StringEntity entity0 = new StringEntity(data, "utf-8");
-	            entity0.setContentType("application/json");
-	            httpPost.setEntity(entity0);
-				//执行请求对象
-				try {
-					//第三步：执行请求对象，获取服务器发还的相应对象
-					HttpResponse response = httpClient.execute(httpPost);
-					//第四步：检查相应的状态是否正常：检查状态码的值是200表示正常
-					if (response.getStatusLine().getStatusCode() == 200) {
-						//第五步：从相应对象当中取出数据，放到entity当中
-						HttpEntity entity = response.getEntity();
-						BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()));
-						String result = reader.readLine();
-						//Log.d("HTTP", "POST:" + result);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
 }
