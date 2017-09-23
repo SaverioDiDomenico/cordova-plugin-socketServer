@@ -2,6 +2,8 @@ package socketServer;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.LOG;
+import org.apache.cordova.PluginResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -102,7 +104,7 @@ public class socketServer extends CordovaPlugin {
 							//myCallbackContext.success(buffer);
 							PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, buffer);
 							pluginResult.setKeepCallback(true);
-							mCallback.sendPluginResult(pluginResult);							
+							mCallback.sendPluginResult(pluginResult);
 						}
 
 					}
