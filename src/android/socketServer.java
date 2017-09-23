@@ -108,7 +108,7 @@ public class socketServer extends CordovaPlugin {
 			} 
 			finally{ 
 				try{
-					input.close(); 
+					//input.close(); 
 					myClientSocket.close();
 				} 
 				catch(IOException ioe) { 
