@@ -104,7 +104,7 @@ public class socketServer extends CordovaPlugin {
 							//myCallbackContext.success(buffer);
 							PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, buffer);
 							pluginResult.setKeepCallback(true);
-							mCallback.sendPluginResult(pluginResult);
+							myCallbackContext.sendPluginResult(pluginResult);
 						}
 
 					}
