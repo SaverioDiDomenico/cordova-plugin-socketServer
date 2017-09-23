@@ -84,7 +84,7 @@ public class socketServer extends CordovaPlugin {
 			myCallbackContext=callbackContext;
 		}
 
-	    public static String bytes2HexString(byte[] b) {  
+	    /*public static String bytes2HexString(byte[] b) {  
 	        StringBuffer result = new StringBuffer();  
 	        String hex;  
 	        for (int i = 0; i < b.length; i++) {  
@@ -95,7 +95,7 @@ public class socketServer extends CordovaPlugin {
 	            result.append(hex.toUpperCase());  
 	        }  
 	        return result.toString();  
-	    }  
+	    } */
 
 		public void run() {
 			try{
@@ -113,7 +113,7 @@ public class socketServer extends CordovaPlugin {
 						else{
 							myCallbackContext.success(buffer);
 						}
-						PostDebugThread postDebugThread = new PostDebugThread(bytes2HexString(buffer));
+						PostDebugThread postDebugThread = new PostDebugThread("buffer");
 						postDebugThread.start();
 					}
 				} 
