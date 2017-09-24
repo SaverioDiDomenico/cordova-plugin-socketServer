@@ -18,52 +18,53 @@ import java.net.ServerSocket;
 import java.net.Socket;
 // Cordova
 import android.util.Log;
-
+import java.util.UUID;
+import java.util.HashMap;
 
 public class socketServer extends CordovaPlugin {
-	private String OutString;
 	ServerSocket myServerSocket;
-	boolean ServerOn = true;
 	boolean ServerActivated = false;
-	
+	HashMap<String, Socket> socketHashMap;
+
 	@Override
 	public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
 		try {
 			if ("startServer".equals(action)) {
-				//final int port = Integer.valueOf(args.getString(0));  
 				final int port = args.getInt(0);  
 				if(ServerActivated){
 					callbackContext.error("has been startServer");
 					return false;
 				}
-				cordova.getThreadPool().execute(new Runnable() {
-					public void run() {
-						try{ 
-							myServerSocket = new ServerSocket(port); 
-							ServerActivated = true;
-						} catch(IOException ioe) { 
-							System.exit(-1); 
-						}
-
-						while(ServerOn) {
-							try{ 
-								Socket clientSocket = myServerSocket.accept();
-								ClientServiceThread ClientThread = new ClientServiceThread(clientSocket, callbackContext);
-								ClientThread.start();
-							} catch(IOException ioe) {
-								ioe.printStackTrace();
-							}
-						}
-						try {
-							myServerSocket.close();
-						} catch(Exception e) {
-							System.exit(-1); 
-						}
-						//callbackContext.success();
-					}
-				});
+				this.startServer(port,callbackContext);
 				return true;
-			} else {
+			} else if("write".equals(action)){
+				final String uuid = args.getString(0); 
+				String data = args.getString(1);
+				if(socketHashMap.containsKey(uuid)){
+					Socket socket=socketHashMap.get(uuid);
+					OutputStream output=socket.getOutputStream();
+					output.write(data.getBytes());
+					return true;
+				} else {
+					return false;
+				}
+				
+			}
+ 			else if("disconnect".equals(action)){
+				final String uuid = args.getString(0); 
+				String data = args.getString(1);
+				if(socketHashMap.containsKey(uuid)){
+					socketHashMap.get(uuid).close();
+					return true;
+				} else {
+					return false;
+				}
+			}
+ 			else if("close".equals(action)){
+				myServerSocket.close();
+				return true;
+			}
+			else {
 				callbackContext.error(action + "not supported");
 				return false;
 			}
@@ -72,43 +73,86 @@ public class socketServer extends CordovaPlugin {
 			return false;
 		}
 	}
+
+	public void startServer(final int port, final CallbackContext callbackContext){
+		socketHashMap = new HashMap<String, Socket>();
+		cordova.getThreadPool().execute(new Runnable() {
+			public void run() {
+				try{ 
+					myServerSocket = new ServerSocket(port); 
+					ServerActivated = true;
+					while(true) {
+						try{ 
+							Socket clientSocket = myServerSocket.accept();
+							String uuid = UUID.randomUUID().toString();
+							socketHashMap.put(uuid,clientSocket);
+							ClientServiceThread ClientThread = new ClientServiceThread(uuid, clientSocket, callbackContext);
+							ClientThread.start();
+						} catch(IOException ioe) {
+							ioe.printStackTrace();
+							callbackContext.error(ioe.getMessage());
+						}
+					}
+				} catch(IOException ioe) {
+					callbackContext.error(ioe.getMessage());
+					ioe.printStackTrace();
+					//System.exit(-1); 
+				}
+			}
+		});
+	}
+
+    public void sendPluginResult(CallbackContext callbackContext,JSONObject obj){
+		PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, obj);
+		pluginResult.setKeepCallback(true);
+		callbackContext.sendPluginResult(pluginResult);
+    }
 	
-	class ClientServiceThread extends Thread { 
+    /**
+     * 接受socket数据线程
+     */
+	class ClientServiceThread extends Thread {
 		Socket myClientSocket;
 		boolean m_bRunThread = true; 
 		CallbackContext myCallbackContext;
+		String myuuid;
 
-		public ClientServiceThread() { 
-			super(); 
-		} 
+		public ClientServiceThread() {
+			super();
+		}
 
-		ClientServiceThread(Socket socket, CallbackContext callbackContext) {
+		ClientServiceThread(String uuid, Socket socket, CallbackContext callbackContext) {
 			myClientSocket = socket; 
 			myCallbackContext=callbackContext;
+			myuuid=uuid;
 		}
 
 		public void run() {
 			try{
 				InputStream input=myClientSocket.getInputStream();
 				OutputStream output = myClientSocket.getOutputStream();
-				byte buffer[] = new byte[1024 * 10];
+				byte buffer[] = new byte[1024 * 4];
 				int count=0;
-				while(m_bRunThread) {
-					if(!ServerOn){ 
-						m_bRunThread = false;
-					}
-					else{
-						count = input.read(buffer);
-						if(count==-1){break;}
-						else{
-							//myCallbackContext.success(buffer);
-							PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, buffer);
-							pluginResult.setKeepCallback(true);
-							myCallbackContext.sendPluginResult(pluginResult);
-						}
-
-					}
+				JSONObject eventObject = new JSONObject();
+				eventObject.put("type", "connect");
+				eventObject.put("socketId", myuuid);
+				socketServer.this.sendPluginResult(myCallbackContext,eventObject);
+				int len =-1;
+				while((len = input.read(buffer))!= -1) {
+					JSONObject dataObject = new JSONObject();
+					dataObject.put("type", "data");
+					dataObject.put("buffer", buffer);
+					dataObject.put("socketId", myuuid);
+					dataObject.put("HostName", myClientSocket.getInetAddress().getHostName());
+					dataObject.put("HostAddress", myClientSocket.getInetAddress().getHostAddress());
+					//PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, buffer);
+					socketServer.this.sendPluginResult(myCallbackContext,dataObject);
 				}
+				//代码走到这里是不是该socket连接数据接收完了？还是一批数据接收完毕？；
+				JSONObject closeObject = new JSONObject();
+				closeObject.put("type", "close");
+				closeObject.put("socketId", myuuid);
+				socketServer.this.sendPluginResult(myCallbackContext,closeObject);
 			}
 			catch(Exception e) {
 				e.printStackTrace();
