@@ -108,6 +108,7 @@ public class socketServer extends CordovaPlugin {
 		callbackContext.sendPluginResult(pluginResult);
     }
 	
+
 	class ClientServiceThread extends Thread {
 		Socket myClientSocket;
 		boolean m_bRunThread = true; 
@@ -165,5 +166,4 @@ public class socketServer extends CordovaPlugin {
 			} 
 		} 
 	}   
-
 }
