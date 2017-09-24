@@ -1,4 +1,4 @@
-﻿package socketServer;
+package socketServer;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
