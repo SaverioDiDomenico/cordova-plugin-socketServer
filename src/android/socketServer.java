@@ -1,4 +1,4 @@
-package socketServer;
+锘縫ackage socketServer;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
@@ -108,9 +108,6 @@ public class socketServer extends CordovaPlugin {
 		callbackContext.sendPluginResult(pluginResult);
     }
 	
-    /**
-     * 接受socket数据线程
-     */
 	class ClientServiceThread extends Thread {
 		Socket myClientSocket;
 		boolean m_bRunThread = true; 
@@ -148,7 +145,7 @@ public class socketServer extends CordovaPlugin {
 					//PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, buffer);
 					socketServer.this.sendPluginResult(myCallbackContext,dataObject);
 				}
-				//代码走到这里是不是该socket连接数据接收完了？还是一批数据接收完毕？；
+
 				JSONObject closeObject = new JSONObject();
 				closeObject.put("type", "close");
 				closeObject.put("socketId", myuuid);
