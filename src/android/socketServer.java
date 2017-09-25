@@ -28,12 +28,14 @@ public class socketServer extends CordovaPlugin {
 	boolean ServerOn = true;
 	boolean ServerActivated = false;
 	HashMap<String, Socket> socketHashMap;
+	JSONObject errorObject = new JSONObject();
 
 	@Override
 	public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
 		try {
 			if ("startServer".equals(action)) {
 				final int port = args.getInt(0);  
+				errorObject.put("type", "error");
 				if(ServerActivated){
 					callbackContext.error("has been startServer");
 					return false;
@@ -79,6 +81,7 @@ public class socketServer extends CordovaPlugin {
 	}
 
 	private void startServer(final int port, final CallbackContext callbackContext){
+		
 		cordova.getThreadPool().execute(new Runnable() {
 			public void run() {
 				try{ 
@@ -105,6 +108,7 @@ public class socketServer extends CordovaPlugin {
 						try {
 							myServerSocket.close();
 							myServerSocket = null;
+							socketServer.this.sendPluginResult(callbackContext,errorObject);
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
@@ -124,6 +128,7 @@ public class socketServer extends CordovaPlugin {
 		Socket myClientSocket;
 		CallbackContext myCallbackContext;
 		String myuuid="";
+		JSONObject closeObject = new JSONObject();
 
 		public ClientServiceThread() { 
 			super();
@@ -137,6 +142,9 @@ public class socketServer extends CordovaPlugin {
 
 		public void run() {
 			try{
+				//JSONObject closeObject = new JSONObject()
+				closeObject.put("type", "close");
+				closeObject.put("socketId", myuuid);
 				InputStream input=myClientSocket.getInputStream();
 				OutputStream output = myClientSocket.getOutputStream();
 				byte buffer[] = new byte[1024 * 4];
@@ -148,11 +156,8 @@ public class socketServer extends CordovaPlugin {
 				//while((len = input.read(buffer))!= -1) {
 				while(true) {
 					len = input.read(buffer);
-					if(len==-1){
-						JSONObject closeObject0 = new JSONObject();
-						closeObject0.put("type", "closeData");
-						closeObject0.put("socketId", myuuid);
-						socketServer.this.sendPluginResult(myCallbackContext,closeObject0);	
+					if(len==-1){;
+						socketServer.this.sendPluginResult(myCallbackContext,closeObject);	
 						break;
 					}
 					else{
@@ -170,9 +175,6 @@ public class socketServer extends CordovaPlugin {
 					}
 				}
 				myClientSocket.close();
-				JSONObject closeObject = new JSONObject();
-				closeObject.put("type", "close");
-				closeObject.put("socketId", myuuid);
 				socketServer.this.sendPluginResult(myCallbackContext,closeObject);
 			}
 			catch(Exception e) {
@@ -182,6 +184,7 @@ public class socketServer extends CordovaPlugin {
 				try{
 					//input.close(); 
 					myClientSocket.close();
+					socketServer.this.sendPluginResult(myCallbackContext,closeObject);
 				} 
 				catch(IOException ioe) {
 					ioe.printStackTrace();
