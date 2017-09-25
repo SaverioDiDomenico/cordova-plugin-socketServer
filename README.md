@@ -1,6 +1,12 @@
 # create a tcp server on android
 
-examle
+install: 
+
+``````
+cordova plugin add https://github.com/huge818/socketServer.git
+````````
+
+example
 ```````````
 document.addEventListener("deviceready", function(){
 	var socketServer=cordova.plugins.socketServer;
