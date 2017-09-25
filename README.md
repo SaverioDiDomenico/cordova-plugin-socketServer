@@ -11,13 +11,15 @@ document.addEventListener("deviceready", function(){
 			console.log("socketId: "+data.socketId);
 			console.log("HostAddress: "+data.HostAddress);
 			console.log("HostName: "+data.HostName);
-			socketServer.write(socketId,"server reply: ok:"+ data.buffer);
+			socketServer.write(socketId,"server reply: ok:"+ data.buffer); //base64
 		}
 		else if(data.type=="connect"){
 			console.log("connect");
+			console.log("socketId: "+data.socketId);
 		}
 		else if(data.type=="close"){
 			console.log("close");
+			console.log("socketId: "+data.socketId);
 		}
 	  	var str=JSON.stringify(data);
 	  	console.log(str);
