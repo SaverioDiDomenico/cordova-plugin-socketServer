@@ -1,4 +1,14 @@
 # create a tcp server on android
+应用场景：物联网，上位机与下位机通讯
+
+日后准备添加的功能：
+1、tcpclient
+2、websocket server 
+3、websocket client
+4、串口 read write
+5、串口转tcp server
+6、串口映射
+7、串口跨内网映射
 
 install: 
 
@@ -36,3 +46,6 @@ document.addEventListener("deviceready", function(){
 }, false);
 
 ```````````
+
+
+
