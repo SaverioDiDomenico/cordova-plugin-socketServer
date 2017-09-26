@@ -2,13 +2,13 @@
 应用场景：物联网，上位机与下位机通讯
 
 日后准备添加的功能：
-1、tcpclient
-2、websocket server 
-3、websocket client
-4、串口 read write
-5、串口转tcp server
-6、串口映射
-7、串口跨内网映射
+1、tcpclient <br/>
+2、websocket server <br/>
+3、websocket client<br/>
+4、串口 read write<br/>
+5、串口转tcp server<br/>
+6、串口映射<br/>
+7、串口跨内网映射<br/>
 
 install: 
 
