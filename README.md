@@ -1,7 +1,7 @@
 # create a tcp server on android
 应用场景：物联网，上位机与下位机通讯
 
-日后准备添加的功能：
+日后准备添加的功能：<br/>
 1、tcpclient <br/>
 2、websocket server <br/>
 3、websocket client<br/>
