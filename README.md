@@ -1,8 +1,10 @@
 # create a tcp server on android
 应用场景：物联网，上位机与下位机通讯
-已实现功能：tcp server，具备onconnect事件，ondata事件，onclose事件，方法write方法
+已实现功能：tcp server，<br/>
+支持事件：onconnect，ondata，onclose，<br/>
+支持方法：write(socketId,data)<br/>
 
-日后准备添加的功能：<br/>
+日后计划实现的功能：<br/>
 1、tcpclient <br/>
 2、websocket server <br/>
 3、websocket client<br/>
