@@ -54,9 +54,9 @@ document.addEventListener("deviceready", function(){
 <br/>
 如果您喜欢nodejs格式的事件写法，可以自行在业务层封装。<br/>
 
-如果想使用websocket，请使用另外一个项目 https://github.com/huge818/cordova-plugin-websocke
+如果想使用websocket，请使用另外一个项目 https://github.com/huge818/cordova-plugin-websocket-server
 
 #API文档
-接口很少，见示例
+接口很少，见示例，后面补齐
 
 
