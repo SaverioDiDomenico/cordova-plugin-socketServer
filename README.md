@@ -8,10 +8,10 @@
 1、tcpclient <br/>
 2、websocket server <br/>
 3、websocket client<br/>
-4、串口 read write<br/>
-5、串口转tcp server<br/>
-6、串口映射<br/>
-7、串口跨内网映射<br/>
+4、（传感器）串口 read write<br/>
+5、（传感器）串口转tcp server<br/>
+6、（传感器）串口映射<br/>
+7、（传感器）串口跨内网映射<br/>
 
 install: 
 
