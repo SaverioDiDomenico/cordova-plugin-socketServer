@@ -17,13 +17,13 @@
 
 只有一个.java文件文件和一个.js文件，不依赖其他第三方模块，修改维修简单。
 
-install: 
+#安装方法: 
 
 ``````
 cordova plugin add https://github.com/huge818/socketServer.git
 ````````
 
-example
+#使用示例
 ```````````
 document.addEventListener("deviceready", function(){
 	var socketServer=cordova.plugins.socketServer;
@@ -56,5 +56,7 @@ document.addEventListener("deviceready", function(){
 <br/>
 如果您喜欢nodejs格式的事件写法，可以自行在业务层封装。<br/>
 
+#API文档
+接口很少，见示例
 
 
