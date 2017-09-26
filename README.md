@@ -6,9 +6,7 @@
 
 近期准备实现的功能：<br/>
 1、tcpclient <br/>
-2、websocket server <br/>
-3、websocket client<br/>
-4、（传感器）串口 read write<br/>
+2、（传感器）串口 read write<br/>
  <br/>
 日后计划实现的功能：<br/>
 5、（传感器）串口转tcp server<br/>
@@ -55,6 +53,8 @@ document.addEventListener("deviceready", function(){
 ```````````
 <br/>
 如果您喜欢nodejs格式的事件写法，可以自行在业务层封装。<br/>
+
+如果想使用websocket，请使用另外一个项目 https://github.com/huge818/cordova-plugin-websocke
 
 #API文档
 接口很少，见示例
