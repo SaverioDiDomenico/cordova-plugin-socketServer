@@ -49,6 +49,8 @@ document.addEventListener("deviceready", function(){
 }, false);
 
 ```````````
+<br/>
+如果您喜欢nodejs格式的事件写法，可以自行在业务层封装。<br/>
 
 
 
