@@ -190,7 +190,8 @@ public class socketServer extends CordovaPlugin {
 			}
 			finally{
 				try{
-					//input.close(); 
+					//input.close();
+					socketHashMap.remove(myuuid);
 					myClientSocket.close();
 					socketServer.this.sendPluginResult(myCallbackContext,finishObject);
 				} 
