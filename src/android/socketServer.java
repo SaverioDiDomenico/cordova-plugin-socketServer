@@ -168,6 +168,7 @@ public class socketServer extends CordovaPlugin {
 						dataObject.put("length", len);
 						String str=new String(buffer, 0, len);
 						dataObject.put("bufferOld", Base64.encodeToString(str.getBytes("UTF-8"), Base64.NO_WRAP));
+						dataObject.put("buffer1", Base64.encodeToString(str.getBytes(), Base64.NO_WRAP));
 						dataObject.put("buffer", str);
 						dataObject.put("socketId", myuuid);
 						dataObject.put("HostName", myClientSocket.getInetAddress().getHostName());
